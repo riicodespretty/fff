@@ -200,11 +200,15 @@ end
 --- or 1 line [match] for subsequent matches in the same file.
 ---@param item FileItem Grep match item
 ---@param ctx table Render context
+---@param item_idx number 1-based item index
 ---@return string[]
-function M.render_line(item, ctx)
+function M.render_line(item, ctx, item_idx)
   -- Track file grouping across the render pass via ctx
   -- ctx._grep_last_file is reset each render (ctx is fresh per render_list call)
-  local is_new_group = (item.relative_path ~= ctx._grep_last_file)
+  -- First rendered item (iter_start) always gets header — fixes missing header
+  -- when paginating backward in multi-page grep results.
+  local is_first_visible = (item_idx == ctx.iter_start)
+  local is_new_group = is_first_visible or (item.relative_path ~= ctx._grep_last_file)
   ctx._grep_last_file = item.relative_path
 
   local match_line = render_match_line(item, ctx)
