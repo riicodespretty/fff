@@ -44,10 +44,12 @@ describe('programmatic search APIs', function()
 
         local hit = find_result_by_name(result.items, 'programmatic_search_spec.lua')
         assert.is_not_nil(hit, 'this spec file should appear in its own search results')
+        ---@cast hit -nil
         assert.are.equal('file', hit.type)
         assert.is_string(hit.relative_path)
+        local normalized = vim.fs.normalize(hit.relative_path)
         assert.is_true(
-          hit.relative_path:find('tests/', 1, true) ~= nil,
+          normalized:find('tests/', 1, true) ~= nil,
           'expected relative_path under tests/, got ' .. tostring(hit.relative_path)
         )
         assert.is_number(hit.size)
@@ -59,7 +61,7 @@ describe('programmatic search APIs', function()
 
         local lua_dir
         for _, item in ipairs(result.items) do
-          if item.name == 'file_picker' and item.relative_path:find('lua/fff/', 1, true) then
+          if item.name == 'file_picker' and vim.fs.normalize(item.relative_path):find('lua/fff/', 1, true) then
             lua_dir = item
             break
           end
