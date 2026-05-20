@@ -306,6 +306,12 @@ local function init()
       grep_fuzzy_active = 'DiagnosticHint', -- Highlight for keybind + label when fuzzy is on
       -- Cross-mode suggestion highlights
       suggestion_header = 'WarningMsg', -- Highlight for the "No results found. Suggested..." banner
+      -- Per-window 'winhighlight' overrides. When nil, falls back to combination of `normal`, `border`, and `title` above.
+      -- Set to a full winhighlight string, e.g. 'Normal:NormalFloat,FloatBorder:FloatBorder,FloatTitle:Title'.
+      prompt_winhl = nil,
+      list_winhl = nil,
+      preview_winhl = nil,
+      file_info_winhl = nil,
     },
     -- Store file open frecency
     frecency = {

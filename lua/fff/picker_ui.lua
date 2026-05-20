@@ -958,7 +958,11 @@ end
 
 function M.setup_windows()
   local hl = M.state.config.hl
-  local win_hl = string.format('Normal:%s,FloatBorder:%s,FloatTitle:%s', hl.normal, hl.border, hl.title)
+  local default_win_hl = string.format('Normal:%s,FloatBorder:%s,FloatTitle:%s', hl.normal, hl.border, hl.title)
+  local prompt_win_hl = hl.prompt_winhl or default_win_hl
+  local list_win_hl = hl.list_winhl or default_win_hl
+  local preview_win_hl = hl.preview_winhl or default_win_hl
+  local file_info_win_hl = hl.file_info_winhl or default_win_hl
 
   vim.api.nvim_set_option_value('wrap', false, { win = M.state.input_win })
   vim.api.nvim_set_option_value('cursorline', false, { win = M.state.input_win })
@@ -966,7 +970,7 @@ function M.setup_windows()
   vim.api.nvim_set_option_value('relativenumber', false, { win = M.state.input_win })
   vim.api.nvim_set_option_value('signcolumn', 'no', { win = M.state.input_win })
   vim.api.nvim_set_option_value('foldcolumn', '0', { win = M.state.input_win })
-  vim.api.nvim_set_option_value('winhighlight', win_hl, { win = M.state.input_win })
+  vim.api.nvim_set_option_value('winhighlight', prompt_win_hl, { win = M.state.input_win })
 
   vim.api.nvim_set_option_value('wrap', false, { win = M.state.list_win })
   vim.api.nvim_set_option_value('cursorline', false, { win = M.state.list_win })
@@ -974,7 +978,7 @@ function M.setup_windows()
   vim.api.nvim_set_option_value('relativenumber', false, { win = M.state.list_win })
   vim.api.nvim_set_option_value('signcolumn', 'yes:1', { win = M.state.list_win }) -- Enable signcolumn for git status borders
   vim.api.nvim_set_option_value('foldcolumn', '0', { win = M.state.list_win })
-  vim.api.nvim_set_option_value('winhighlight', win_hl, { win = M.state.list_win })
+  vim.api.nvim_set_option_value('winhighlight', list_win_hl, { win = M.state.list_win })
 
   if M.state.file_info_win and vim.api.nvim_win_is_valid(M.state.file_info_win) then
     vim.api.nvim_set_option_value('wrap', false, { win = M.state.file_info_win })
@@ -983,7 +987,7 @@ function M.setup_windows()
     vim.api.nvim_set_option_value('relativenumber', false, { win = M.state.file_info_win })
     vim.api.nvim_set_option_value('signcolumn', 'no', { win = M.state.file_info_win })
     vim.api.nvim_set_option_value('foldcolumn', '0', { win = M.state.file_info_win })
-    vim.api.nvim_set_option_value('winhighlight', win_hl, { win = M.state.file_info_win })
+    vim.api.nvim_set_option_value('winhighlight', file_info_win_hl, { win = M.state.file_info_win })
   end
 
   if M.enabled_preview() then
@@ -1027,7 +1031,7 @@ function M.setup_windows()
     vim.api.nvim_set_option_value('relativenumber', false, { win = M.state.preview_win })
     vim.api.nvim_set_option_value('signcolumn', 'no', { win = M.state.preview_win })
     vim.api.nvim_set_option_value('foldcolumn', '0', { win = M.state.preview_win })
-    vim.api.nvim_set_option_value('winhighlight', win_hl, { win = M.state.preview_win })
+    vim.api.nvim_set_option_value('winhighlight', preview_win_hl, { win = M.state.preview_win })
   end
 
   local picker_group = vim.api.nvim_create_augroup('fff_picker_focus', { clear = true })
