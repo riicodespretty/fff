@@ -186,6 +186,7 @@ pub struct FffServer {
     frecency: SharedFrecency,
     cursor_store: Arc<Mutex<CursorStore>>,
     update_notice_sent: Arc<AtomicBool>,
+    #[allow(dead_code)]
     tool_router: ToolRouter<Self>,
 }
 
