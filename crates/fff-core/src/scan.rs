@@ -21,6 +21,10 @@ pub(crate) struct ScanSignals {
     pub(crate) scanning: Arc<AtomicBool>,
     /// Set to `true` once the filesystem watcher has been installed
     pub(crate) watcher_ready: Arc<AtomicBool>,
+    /// Set to `true` after post-scan work completes (warmup/indexing), or
+    /// immediately after walk if both disabled. Tracks warmup completion
+    /// independently of bigram_index presence.
+    pub(crate) warmup_complete: Arc<AtomicBool>,
     /// Indicates that that owning picker was requested to shut down
     pub(crate) cancelled: Arc<AtomicBool>,
     /// Used to resolve conflicts if multiple rescans were triggered in a queue
@@ -213,6 +217,12 @@ impl ScanJob {
             && let Some(snap) = snapshot.as_ref()
         {
             Self::run_post_scan(&shared_picker, &signals, &config, snap);
+        }
+
+        // Mark warmup complete. Set after post-scan finishes OR immediately
+        // if no post-scan work needed (both warmup and content_indexing false).
+        if !signals.cancelled.load(Ordering::Acquire) {
+            signals.warmup_complete.store(true, Ordering::Release);
         }
 
         // 4. Join and git status, this HAS to be done after the post scan

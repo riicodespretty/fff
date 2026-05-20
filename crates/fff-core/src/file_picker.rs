@@ -1202,7 +1202,7 @@ impl FilePicker {
             scanned_files_count: scanned_count,
             is_scanning,
             is_watcher_ready: self.signals.watcher_ready.load(Ordering::Relaxed),
-            is_warmup_complete: self.sync_data.bigram_index.is_some(),
+            is_warmup_complete: self.signals.warmup_complete.load(Ordering::Relaxed),
         }
     }
 
