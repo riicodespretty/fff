@@ -299,7 +299,7 @@ export default function fffExtension(pi: ExtensionAPI) {
   let currentMode: FffMode =
     (pi.getFlag("fff-mode") as FffMode) ??
     (process.env.PI_FFF_MODE as FffMode) ??
-    "tools-and-ui";
+    "ui-only";
 
   // ── Cross-extension protocol: expose FFF engine to pi-hashline-readmap ──
   const fffHandle = {
