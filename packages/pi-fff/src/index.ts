@@ -325,7 +325,7 @@ export default function fffExtension(pi: ExtensionAPI) {
     api.setFffEngine(fffHandle);
   }
 
-  // Tool registration is deferred to queueMicrotask so __piHashlineReadmap
+  // Only register tools when mode is not ui-only (tool name is non-empty)
   // is reliably set (all synchronous factories finish first).
   const toolNames = resolveToolNames(currentMode);
 
@@ -587,7 +587,7 @@ export default function fffExtension(pi: ExtensionAPI) {
     ),
   });
 
-  queueMicrotask(() => { if (!(globalThis as any).__piHashlineReadmap) {
+  if (toolNames.grep || toolNames.find || toolNames.multiGrep) {
 
   pi.registerTool({
     name: toolNames.grep,
@@ -723,9 +723,9 @@ export default function fffExtension(pi: ExtensionAPI) {
     },
   });
 
-  } }); // end: microtask
+  }
 
-  queueMicrotask(() => { if (!(globalThis as any).__piHashlineReadmap) {
+  if (toolNames.grep || toolNames.find || toolNames.multiGrep) {
 
   // --- find tool ---
 
@@ -857,9 +857,9 @@ export default function fffExtension(pi: ExtensionAPI) {
     },
   });
 
-  } }); // end: microtask
+  }
 
-  queueMicrotask(() => { if (!(globalThis as any).__piHashlineReadmap) {
+  if (toolNames.grep || toolNames.find || toolNames.multiGrep) {
 
   // --- multi_grep tool ---
   // My latest tests are showing that the multi grep tool is only harmful, trying to get rid of it
@@ -958,7 +958,7 @@ export default function fffExtension(pi: ExtensionAPI) {
       },
     });
   } // end if (enableMultiGrep)
-  } }); // end: microtask
+  }
 
   // --- commands ---
 
